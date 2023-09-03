@@ -20,8 +20,9 @@ public class GameArea : MonoBehaviour
     public Shooter shooter;
 
     private float RoundTime = 60f;
-    private float BubblesPerRound = 10;
+    private float BubblesPerRound = 13;
     private bool gameStarted = false;
+    private bool setupComplete = false;
     private int currentRound = 1;
     public GameObject corner1;
     public GameObject corner2;
@@ -109,12 +110,6 @@ public class GameArea : MonoBehaviour
             Debug.Log($"Debug: All corners set! P1:{positionP1}, P2:{positionP2}");
             UpdateGameField(positionP1, positionP2);
 
-            // Start the game only if it hasn't already been started
-            if (!gameStarted)
-            {
-                gameStarted = true;
-                StartCoroutine(StartGame());
-            }
         }
         else
         {
@@ -174,6 +169,8 @@ public class GameArea : MonoBehaviour
         foreach (var plane in planeManager.trackables)
         {
             plane.gameObject.SetActive(false);
+
+            // EXPERIMENTEL
             //plane.GetComponent<MeshRenderer>().enabled = false;
             //plane.GetComponent<LineRenderer>().enabled = false;
 
@@ -181,17 +178,22 @@ public class GameArea : MonoBehaviour
         }
         */
 
-        gameStarted = true;
-        StartCoroutine(StartGame());
+        shootPoint.gameObject.SetActive(true);
+        setupComplete = true;
     }
 
     public void continueGame()
     {
-        if (gameStarted == false)
+        if (setupComplete && gameStarted == false)
         {
             gameObject.GetComponent<AudioSource>().PlayOneShot(audioButton);
             gameStarted = true;
+            pointMaster.b1.transform.parent.gameObject.SetActive(false);
             StartCoroutine(StartGame());
+        }
+        else
+        {
+            Debug.Log($"Debug: gameStarted = {gameStarted}, setupComplete = {setupComplete}");
         }
     }
 
@@ -211,7 +213,8 @@ public class GameArea : MonoBehaviour
         float difficulty = 0.05f * currentRound;
         
 
-        shootPoint.gameObject.SetActive(true);
+        
+        shooter.GetComponent<Shooter>().GamePaused(false);
 
 
         // Compute the corners and vectors representing the sides of the square
@@ -274,7 +277,7 @@ public class GameArea : MonoBehaviour
         }
         bubbles.Clear();
         gameObject.GetComponent<AudioSource>().PlayOneShot(audioFin);
-        shootPoint.gameObject.SetActive(false);
+        shooter.GetComponent<Shooter>().GamePaused(true);
         gameStarted = false;
         pointMaster.shop();
     }

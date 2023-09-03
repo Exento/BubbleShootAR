@@ -1,17 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RaycastButtonPress : MonoBehaviour
 {
     void Update()
     {
-        // Check if the screen is touched
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        // Create a ray and RaycastHit variable to store the hit result
+        Ray ray;
+        RaycastHit hit;
+
+        // Check if the screen is touched or mouse button is pressed
+        if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || Input.GetMouseButtonDown(0))
         {
-            // Create a ray from the touch position
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-            RaycastHit hit;
+            // Create a ray from either the touch or mouse position
+            if (Input.touchCount > 0)
+            {
+                ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            }
+            else
+            {
+                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            }
 
             // Perform the raycast
             if (Physics.Raycast(ray, out hit))

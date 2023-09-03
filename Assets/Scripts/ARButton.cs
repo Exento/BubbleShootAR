@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
+
 
 public class ARButton : MonoBehaviour
 {
@@ -23,5 +21,4 @@ public class ARButton : MonoBehaviour
             buttonAnimator.SetTrigger("pressed");
             audioSource.PlayOneShot(buttonSound);
         }
-
     }

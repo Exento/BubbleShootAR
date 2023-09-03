@@ -13,9 +13,11 @@ public class Shooter : MonoBehaviour
     public GameObject arrow;
     public float shootAnimTime = 0.05f;
     private bool isReloading = false;
+    private bool isPaused = false;
     public float reloadTime = 2f;
     public float gameScale = 1f;
     public GameArea gameArea;
+    private Animator shootPointAnimator;
 
     //STATS
     private int projectile_DMG = 1;
@@ -30,6 +32,8 @@ public class Shooter : MonoBehaviour
     private void Start()
     {
         skinnedMeshRenderer.SetBlendShapeWeight(0, 100f);
+        shootPointAnimator = shootPoint.transform.GetComponent<Animator>();
+        
 
         //testing upgrades
         /*
@@ -62,10 +66,23 @@ public class Shooter : MonoBehaviour
         } 
     }
 
+    public void GamePaused(bool value)
+    {
+        isPaused = value;
+
+        if (isPaused)
+        {
+            shootPointAnimator.SetBool("paused", true);
+        }else
+        {
+            shootPointAnimator.SetBool("paused", false);
+        }
+    }
+
     private IEnumerator ShootAndReload()
     {
 
-        if (!isReloading)
+        if (!isReloading && !isPaused)
         {
             isReloading = true;
 

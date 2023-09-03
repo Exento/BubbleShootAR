@@ -187,15 +187,17 @@ public class PointManager : MonoBehaviour
 
             audioSource.PlayOneShot(buySound);
             UpdateBalance();
-        }else
+            UpdateUI();
+        }
+        else
         {
             audioSource.PlayOneShot(negativeSound);
         }
 
         // Update the UI again to reflect the new levels and costs
         UpdateUI();
-        b1.transform.parent.gameObject.SetActive(false);
-        gameObject.GetComponent<GameArea>().continueGame();
+        //b1.transform.parent.gameObject.SetActive(false);
+        //gameObject.GetComponent<GameArea>().continueGame();
     }
 
     public void UpdateBalance()
